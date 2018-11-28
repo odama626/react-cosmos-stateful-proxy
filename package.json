@@ -2,9 +2,14 @@
   "name": "react-cosmos-stateful-proxy",
   "version": "1.0.0",
   "description": "A stateful container for stateless react components",
-  "main": "react-cosmos-stateful-proxy.js",
+  "main": "lib/index.js",
+  "repository": "omarzion/react-cosmos-stateful-proxy",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src/index.js -o lib/index.js"
+  },
+  "peerDependencies": {
+    "react": "^15"
   },
   "keywords": [
     "react-cosmos",
@@ -14,5 +19,11 @@
     "proxies"
   ],
   "author": "Adam Sparks",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-react-app": "^3.1.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+  }
 }
