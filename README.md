@@ -1,6 +1,8 @@
 # react-cosmos-stateful-proxy
 A stateful container for stateless react components
 
+npm package https://www.npmjs.com/package/react-cosmos-stateful-proxy
+
 Stateless react components are pretty common but they can be kind of hard to test by themselves when you don't have a wrapper component to hold the state.
 
 That is where this stateful proxy comes in.
