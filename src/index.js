@@ -3,7 +3,6 @@ import React from 'react';
 export default (props) => {
   const { nextProxy, ...rest } = props;
   const { value: NextProxy, next } = nextProxy;
-  console.log(props);
   if (!props.fixture.controllers) {
     // Carry on
     return <NextProxy {...rest} nextProxy={next()} />;
