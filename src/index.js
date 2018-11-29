@@ -3,6 +3,7 @@ import React from 'react';
 export default (props) => {
   const { nextProxy, ...rest } = props;
   const { value: NextProxy, next } = nextProxy;
+  console.log(props);
   if (!props.fixture.controllers) {
     // Carry on
     return <NextProxy {...rest} nextProxy={next()} />;
@@ -10,7 +11,11 @@ export default (props) => {
 
   // Wrap the component
   return (
-    <Wrapper {...props.fixture.controllers} Child={state => <NextProxy {...addInnerProps(rest, state)} nextProxy={next()} />} />
+    <Wrapper
+      {...props.fixture.controllers}
+      update={props.onFixtureUpdate}
+      Child={state => <NextProxy {...addInnerProps(rest, state)} nextProxy={next()} />}
+    />
   )
 };
 
@@ -31,45 +36,21 @@ class Wrapper extends React.Component {
   static hoc = true;
   constructor(props) {
     super(props);
-    const { Child, ...controllers } = props;
+    const { Child, update, ...controllers } = props;
     this.state = Object.keys(controllers).map(key => (
-      { [key]: (...args) => this.setState(controllers[key](...args))}
+      { [key]: (...args) => {
+        // update editor
+        let nextState = controllers[key](...args)
+        props.update(nextState);
+        // update state
+        this.setState(nextState);
+      }}
     )).reduce((acc, cur) => ({...acc, ...cur }), {});
   }
 
   render() {
-    const { Child, ...rest} = this.props;
+    const { Child, update, ...rest} = this.props;
     let props = {...rest, ...this.state};
     return <Child {...props}/>
   }
 }
-
-// import type { ProxyProps } from 'react-cosmos-flow/proxy';
-
-// const defaults = {
-//   // Add option defaults here...
-// };
-
-// export default (options) => {
-//   const {
-//     /* Expand options here... */
-//   } = { ...defaults, ...options };
-
-//   console.log(defaults, options);
-
-//   const NoopProxy = (props) => {
-//     const { nextProxy, ...rest } = props;
-//     const { value: NextProxy, next } = nextProxy;
-//     if (!props.fixture.controllers) {
-//       // Carry on
-//       return <NextProxy {...rest} nextProxy={next()} />;
-//     }
-
-//     // Wrap the component
-//     return (
-//       <Wrapper {...props.fixture.controllers} Child={state => <NextProxy {...addInnerProps(rest, state)} nextProxy={next()} />} />
-//     )
-//   };
-
-//   return NoopProxy;
-// };
