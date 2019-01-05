@@ -1,5 +1,5 @@
 import React from 'react';
-const deepMerge = require('deepmerge'); // TODO: find a package that is bundled with more modern standards
+import { recursive as mergeRecursive } from 'merge'
 
 
 export default (props) => {
@@ -29,7 +29,7 @@ export default (props) => {
           ...rest,
           fixture: {
             ...rest.fixture,
-            props: deepMerge(rest.fixture.props, enrichedProps),
+            props: mergeRecursive(true, rest.fixture.props, enrichedProps),
 
           },
         }
@@ -48,22 +48,28 @@ class Wrapper extends React.Component {
     // Extract controller props and react-cosmos update function
     const { update, controllers } = props;
     this.state = {
-      ...this.extractControllersFunctionsObject(controllers, update, (...args) => this.deepMergeState(...args))
+      ...this.extractControllersFunctionsObject(controllers, update, (...args) => this.recursivelyMergeState(...args))
     };
   }
 
-  // To prevent overwriting nested props user sets in a fixture
-  deepMergeState = (nextState) => {
-    this.setState(s => deepMerge(s, nextState));
+  // To prevent overwriting nested controllers the user sets in a fixture
+  recursivelyMergeState = (nextState) => {
+    this.setState(s => {
+      // Handle setState function arg like React.setState would
+      if (typeof nextState === 'function') {
+        nextState = nextState(s);
+      }
+      return mergeRecursive(true, s, nextState);
+    })
   }
 
   // For recursively transforming controllers prop to state setting functions
-  extractControllersFunctionsObject(controllers, update, setState) {
+  extractControllersFunctionsObject(controllers, injectedUpdate, injectedSetState) {
     const transformedControllerObject = Object.entries(controllers).map(([key, value]) => {
       // type == object: branch
       if (typeof value === 'object') {
         return {
-          [key]: this.extractControllersFunctionsObject(value, update, setState)
+          [key]: this.extractControllersFunctionsObject(value, injectedUpdate, injectedSetState)
         };
       }
       // type == function: leaf
@@ -74,9 +80,9 @@ class Wrapper extends React.Component {
             // Set empty object as fallback when there is no return value provided by the user
             const nextState = value(...args) || {};
             // Update editor
-            update(nextState);
+            injectedUpdate(nextState);
             // Update state
-            setState(nextState);
+            injectedSetState(nextState);
           }
         };
       }
@@ -88,7 +94,7 @@ class Wrapper extends React.Component {
       }
     });
 
-    // Reduce to turn our mapped array into a flat object again
+    // Reduce mapped array to get a flat object again
     return transformedControllerObject.reduce((acc, cur) => ({ ...acc, ...cur }), {});
   }
 
@@ -96,7 +102,7 @@ class Wrapper extends React.Component {
     // Get all props without Child, update and controllers
     const { Child, update, controllers, ...rest } = this.props;
     // Prevent nested props from being overwritten when being merged with our generated state
-    const props = deepMerge(rest, this.state);
+    const props = mergeRecursive(true, rest, this.state);
     return <Child {...props} />
   }
 }
