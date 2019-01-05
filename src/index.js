@@ -1,5 +1,5 @@
 import React from 'react';
-import { recursive as mergeRecursive } from 'merge'
+import { recursive as mergeRecursive } from 'merge';
 
 
 export default (props) => {
@@ -13,9 +13,9 @@ export default (props) => {
   }
 
   // Extract controllers fixture props
-  const controllers = rest.fixture.controllers
+  const controllers = rest.fixture.controllers;
   // Remove them from the "normal" props
-  rest.fixture.controllers = undefined
+  rest.fixture.controllers = undefined;
 
   // Wrap the component
   return (
@@ -31,7 +31,7 @@ export default (props) => {
             ...rest.fixture,
             props: mergeRecursive(true, rest.fixture.props, enrichedProps),
           },
-        }
+        };
         return (
           <NextProxy {...newProps} nextProxy={next()} />
         )
@@ -102,6 +102,6 @@ class Wrapper extends React.Component {
     const { Child, update, controllers, ...rest } = this.props;
     // Prevent nested props from being overwritten when being merged with our generated state
     const props = mergeRecursive(true, rest, this.state);
-    return <Child {...props} />
+    return <Child {...props} />;
   }
 }
