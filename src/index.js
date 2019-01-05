@@ -24,7 +24,7 @@ export default (props) => {
       controllers={controllers}
       update={props.onFixtureUpdate}
       Child={enrichedProps => {
-        // inject enrichedprops in fixture.props
+        // Inject enriched props in fixture.props
         const newProps = {
           ...rest,
           fixture: {
@@ -52,7 +52,7 @@ class Wrapper extends React.Component {
     };
   }
 
-  // To prevent overwriting nested props we set in a fixture
+  // To prevent overwriting nested props user sets in a fixture
   deepMergeState = (nextState) => {
     this.setState(s => deepMerge(s, nextState));
   }
