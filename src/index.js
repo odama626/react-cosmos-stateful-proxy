@@ -30,7 +30,6 @@ export default (props) => {
           fixture: {
             ...rest.fixture,
             props: mergeRecursive(true, rest.fixture.props, enrichedProps),
-
           },
         }
         return (
