@@ -1,6 +1,6 @@
 {
   "name": "react-cosmos-stateful-proxy",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A stateful container for stateless react components",
   "main": "lib/index.js",
   "repository": "omarzion/react-cosmos-stateful-proxy",
@@ -26,5 +26,8 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react-app": "^3.1.0"
+  },
+  "dependencies": {
+    "merge": "^1.2.1"
   }
 }
