@@ -9,8 +9,12 @@ That is where this stateful proxy comes in.
 
 to use:
 
-### Configuration
+```bash
+npm install react-cosmos-stateful-proxy
 ```
+
+### Configuration
+```javascript
 // cosmos.proxies.js
 import StatefulProxy from 'react-cosmos-stateful-proxy';
 
@@ -21,7 +25,7 @@ export default [
 ```
 
 ### Activation
-```
+```javascript
 // __fixtures__/example.js
 export default {
   component: MyComponent,
